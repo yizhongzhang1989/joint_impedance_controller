@@ -1,4 +1,4 @@
-// Control-law implementation for my_joint_impedance_controller.
+// Control-law implementation for joint_impedance_controller.
 //
 // Pipeline per update():
 //   1. Read <joint>/{position, velocity} state interfaces.
@@ -9,7 +9,7 @@
 //   5. Apply torque rate saturation, then absolute torque saturation.
 //   6. Write to <joint>/effort command interfaces and publish to ~/tau_d.
 
-#include "my_joint_impedance_controller/my_joint_impedance_controller.hpp"
+#include "joint_impedance_controller/joint_impedance_controller.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -21,9 +21,9 @@
 #include "pluginlib/class_list_macros.hpp"
 #include "urdf/model.h"
 
-#include "my_joint_impedance_controller/math.hpp"
+#include "joint_impedance_controller/math.hpp"
 
-namespace my_joint_impedance_controller {
+namespace joint_impedance_controller {
 
 namespace {
 
@@ -50,7 +50,7 @@ std::string fetch_robot_description(const rclcpp_lifecycle::LifecycleNode::Share
 
 } // namespace
 
-controller_interface::CallbackReturn MyJointImpedanceController::on_init() {
+controller_interface::CallbackReturn JointImpedanceController::on_init() {
     try {
         param_listener_ = std::make_shared<ParamListener>(get_node());
         params_ = param_listener_->get_params();
@@ -63,7 +63,7 @@ controller_interface::CallbackReturn MyJointImpedanceController::on_init() {
 }
 
 controller_interface::InterfaceConfiguration
-MyJointImpedanceController::command_interface_configuration() const {
+JointImpedanceController::command_interface_configuration() const {
     controller_interface::InterfaceConfiguration cfg;
     cfg.type = controller_interface::interface_configuration_type::INDIVIDUAL;
     cfg.names.reserve(params_.joints.size());
@@ -74,7 +74,7 @@ MyJointImpedanceController::command_interface_configuration() const {
 }
 
 controller_interface::InterfaceConfiguration
-MyJointImpedanceController::state_interface_configuration() const {
+JointImpedanceController::state_interface_configuration() const {
     controller_interface::InterfaceConfiguration cfg;
     cfg.type = controller_interface::interface_configuration_type::INDIVIDUAL;
     cfg.names.reserve(params_.joints.size() * 2);
@@ -86,7 +86,7 @@ MyJointImpedanceController::state_interface_configuration() const {
 }
 
 controller_interface::CallbackReturn
-MyJointImpedanceController::on_configure(const rclcpp_lifecycle::State& /*previous_state*/) {
+JointImpedanceController::on_configure(const rclcpp_lifecycle::State& /*previous_state*/) {
     params_ = param_listener_->get_params();
     const std::size_t n = params_.joints.size();
 
@@ -160,7 +160,7 @@ MyJointImpedanceController::on_configure(const rclcpp_lifecycle::State& /*previo
 }
 
 controller_interface::CallbackReturn
-MyJointImpedanceController::on_activate(const rclcpp_lifecycle::State& /*previous_state*/) {
+JointImpedanceController::on_activate(const rclcpp_lifecycle::State& /*previous_state*/) {
     const std::size_t n = params_.joints.size();
 
     // Refresh gains so a reconfigure between deactivate→activate is picked up.
@@ -188,7 +188,7 @@ MyJointImpedanceController::on_activate(const rclcpp_lifecycle::State& /*previou
 }
 
 controller_interface::CallbackReturn
-MyJointImpedanceController::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/) {
+JointImpedanceController::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/) {
     // Hand over a clean effort command so whoever takes the interfaces next
     // doesn't start from our last torque.
     for (auto& iface : command_interfaces_) {
@@ -198,7 +198,7 @@ MyJointImpedanceController::on_deactivate(const rclcpp_lifecycle::State& /*previ
 }
 
 controller_interface::return_type
-MyJointImpedanceController::update(const rclcpp::Time& time,
+JointImpedanceController::update(const rclcpp::Time& time,
                                    const rclcpp::Duration& /*period*/) {
     const std::size_t n = params_.joints.size();
 
@@ -276,7 +276,7 @@ MyJointImpedanceController::update(const rclcpp::Time& time,
     return controller_interface::return_type::OK;
 }
 
-} // namespace my_joint_impedance_controller
+} // namespace joint_impedance_controller
 
-PLUGINLIB_EXPORT_CLASS(my_joint_impedance_controller::MyJointImpedanceController,
+PLUGINLIB_EXPORT_CLASS(joint_impedance_controller::JointImpedanceController,
                        controller_interface::ControllerInterface)

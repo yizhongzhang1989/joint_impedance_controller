@@ -1,10 +1,10 @@
-// Header for my_joint_impedance_controller. Declares the ControllerInterface
+// Header for joint_impedance_controller. Declares the ControllerInterface
 // lifecycle hooks plus the runtime state needed to run
 // `tau = K (q_d - q) + D (qdot_d - qdot)` against `<joint>/{position, velocity}`
 // state interfaces and `<joint>/effort` command interfaces.
 
-#ifndef MY_JOINT_IMPEDANCE_CONTROLLER__MY_JOINT_IMPEDANCE_CONTROLLER_HPP_
-#define MY_JOINT_IMPEDANCE_CONTROLLER__MY_JOINT_IMPEDANCE_CONTROLLER_HPP_
+#ifndef JOINT_IMPEDANCE_CONTROLLER__JOINT_IMPEDANCE_CONTROLLER_HPP_
+#define JOINT_IMPEDANCE_CONTROLLER__JOINT_IMPEDANCE_CONTROLLER_HPP_
 
 #include <memory>
 #include <vector>
@@ -16,13 +16,13 @@
 #include "realtime_tools/realtime_publisher.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
 
-#include "my_joint_impedance_controller/my_joint_impedance_controller_parameters.hpp"
+#include "joint_impedance_controller/joint_impedance_controller_parameters.hpp"
 
-namespace my_joint_impedance_controller {
+namespace joint_impedance_controller {
 
-class MyJointImpedanceController : public controller_interface::ControllerInterface {
+class JointImpedanceController : public controller_interface::ControllerInterface {
   public:
-    MyJointImpedanceController() = default;
+    JointImpedanceController() = default;
 
     controller_interface::CallbackReturn on_init() override;
 
@@ -77,6 +77,6 @@ class MyJointImpedanceController : public controller_interface::ControllerInterf
     std::shared_ptr<RealtimeJointStatePublisher> tau_d_rt_pub_;
 };
 
-} // namespace my_joint_impedance_controller
+} // namespace joint_impedance_controller
 
-#endif // MY_JOINT_IMPEDANCE_CONTROLLER__MY_JOINT_IMPEDANCE_CONTROLLER_HPP_
+#endif // JOINT_IMPEDANCE_CONTROLLER__JOINT_IMPEDANCE_CONTROLLER_HPP_

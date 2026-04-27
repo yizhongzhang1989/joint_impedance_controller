@@ -1,4 +1,4 @@
-my_joint_impedance_controller:
+joint_impedance_controller:
   joints:
     type: string_array
     description: "Ordered list of joint names the controller commands."

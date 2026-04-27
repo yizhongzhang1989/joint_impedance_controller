@@ -1,10 +1,10 @@
-// Pure-math helpers for my_joint_impedance_controller.
+// Pure-math helpers for joint_impedance_controller.
 //
 // Header-only so unit tests (and the controller TU itself) can include it
 // without linking against the controller shared library.
 
-#ifndef MY_JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_
-#define MY_JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_
+#ifndef JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_
+#define JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_
 
 #include <algorithm>
 #include <cmath>
@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace my_joint_impedance_controller {
+namespace joint_impedance_controller {
 
 // Critical-damping auto-fill: any negative entry in `d` is replaced with
 // 2 * sqrt(max(k[i], 0)). Non-negative entries pass through unchanged.
@@ -151,6 +151,6 @@ inline bool validate_target_joint_state(const std::vector<std::string>& msg_name
     return true;
 }
 
-} // namespace my_joint_impedance_controller
+} // namespace joint_impedance_controller
 
-#endif // MY_JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_
+#endif // JOINT_IMPEDANCE_CONTROLLER__MATH_HPP_

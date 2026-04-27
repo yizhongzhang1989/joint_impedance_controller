@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(my_joint_impedance_controller)
+project(joint_impedance_controller)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -23,11 +23,11 @@ find_package(urdf REQUIRED)
 
 generate_parameter_library(
   ${PROJECT_NAME}_parameters
-  src/my_joint_impedance_controller.yaml
+  src/joint_impedance_controller.yaml
 )
 
 add_library(${PROJECT_NAME} SHARED
-  src/my_joint_impedance_controller.cpp
+  src/joint_impedance_controller.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -54,7 +54,7 @@ ament_target_dependencies(${PROJECT_NAME}
 )
 
 pluginlib_export_plugin_description_file(
-  controller_interface my_joint_impedance_controller.xml
+  controller_interface joint_impedance_controller.xml
 )
 
 install(
