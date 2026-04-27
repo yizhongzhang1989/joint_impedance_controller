@@ -1,0 +1,59 @@
+my_joint_impedance_controller:
+  joints:
+    type: string_array
+    description: "Ordered list of joint names the controller commands."
+    validation:
+      size_gt<>: [0]
+      unique<>: null
+
+  k:
+    type: double_array
+    description: >
+      Per-joint proportional stiffness (N*m/rad). Must be the same length
+      as 'joints'. All entries must be >= 0.
+    validation:
+      size_gt<>: [0]
+      lower_element_bounds<>: [0.0]
+
+  d:
+    type: double_array
+    description: >
+      Per-joint damping (N*m*s/rad). Same length as 'joints'. If an entry
+      is negative the controller auto-fills it with critical damping
+      2*sqrt(k[i]) at activation time.
+    validation:
+      size_gt<>: [0]
+
+  tau_max:
+    type: double_array
+    description: >
+      Absolute per-joint torque limit (N*m). Final clamp on the commanded
+      torque. Same length as 'joints'. Entries must be >= 0.
+    validation:
+      size_gt<>: [0]
+      lower_element_bounds<>: [0.0]
+
+  max_delta_tau:
+    type: double_array
+    description: >
+      Per-joint maximum change in commanded torque between consecutive
+      update() calls (N*m). Applied before tau_max. Entries must be >= 0.
+    validation:
+      size_gt<>: [0]
+      lower_element_bounds<>: [0.0]
+
+  command_topic:
+    type: string
+    default_value: "/target_joint"
+    description: >
+      Topic on which the controller listens for sensor_msgs/JointState
+      desired configurations. Defaults to /target_joint to match the
+      CRISP joint_impedance_controller, so the existing dashboard sliders
+      drive this controller transparently.
+
+  diagnostics_topic:
+    type: string
+    default_value: "~/tau_d"
+    description: >
+      Topic on which the controller publishes the commanded torque as a
+      sensor_msgs/JointState (same shape as crisp's ~/tau_d).
